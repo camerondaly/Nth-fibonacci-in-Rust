@@ -3,24 +3,25 @@ use std::io;
 fn main() {
     let n: u32 = get_positive_number_from_user();
     let nth = find_nth_fibonacci_number(n);
-    println!("The {}th Fibonacci number is {}!", n, nth);
-    test();
+    println!("Fibonacci number {} is {}.", n, nth);
+    // test();
 }
 
 
 fn find_nth_fibonacci_number(n: u32) -> u128 {
-    // 1,2,3,5,8,13,...
+    // 0,1,1,2,3,5,8,13,...
     // O(n) time and constant space complexity with dynamic memoization.
-    if n <= 2 {
+    if n <= 1 {
         return n.into();
     }
-    let mut two_prev = 1;
-    let mut one_prev = 2;
-    let mut curr: u128 = 3;
-    for _ in 3..n + 1 {
+    let mut two_prev: u128 = 0;
+    let mut one_prev: u128 = 1;
+    let mut curr: u128 = 1;
+    for _ in 2..n + 1 {
         curr = two_prev + one_prev;
         two_prev = one_prev;
         one_prev = curr;
+        println!("now we are on {}", curr);
     }
     return curr;
 }
@@ -40,16 +41,13 @@ fn get_positive_number_from_user() -> u32 {
 }
 
 fn test() {
-    let pass: bool = 
-        1 == find_nth_fibonacci_number(1) && 
-        2 == find_nth_fibonacci_number(2) && 
-        3 ==find_nth_fibonacci_number(3) && 
-        5 == find_nth_fibonacci_number(4) && 
-        8 == find_nth_fibonacci_number(5) && 
-        13 == find_nth_fibonacci_number(6);
-    if pass == true {
-        println!("Tests passed.");
-    } else {
-        println!("Tests failed!");
-    }
+    let expected = [0, 1, 1, 2, 3, 5, 8, 13, 21];
+    for i in 0..9 {
+        let curr_res = find_nth_fibonacci_number(i as u32);
+        if curr_res != expected[i as usize] {
+            println!("Test failed! Actual {} does not equal expected {}", curr_res, expected[i as usize]);
+            return;
+        }
+    } 
+    println!("All tests passed!");
 }
